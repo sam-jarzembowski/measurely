@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Simple Firebase Auth</title>
+</head>
+<body>
+    <h2>Firebase Auth Demo</h2>
+    
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="password" placeholder="Password">
+    
+    <button id="btn-signup">Sign Up</button>
+    <button id="btn-login">Log In</button>
+    <button id="btn-logout">Log Out</button>
+
+    <p id="status">User is currently logged out.</p>
+
+    <h3>Choose your recipe:</h3>
+    <div id="recipe-container">
+        <button class="recipe-btn" data-recipe="Chocolate Chip Cookies">Cookies</button>
+        <button class="recipe-btn" data-recipe="Sourdough Bread">Bread</button>
+        <button class="recipe-btn" data-recipe="Vanilla Cake">Cake</button>
+        <button class="recipe-btn" data-recipe="Fudgy Brownies">Brownies</button>
+    </div>
+    <p id="selection-status"></p>
+
+    <script type="module">
+      // 1. Import the functions you need from the SDKs you need
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+      import { 
+          getAuth, 
+          createUserWithEmailAndPassword, 
+          signInWithEmailAndPassword,
+          onAuthStateChanged,
+          signOut
+      } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+      // Add these to your existing imports
+    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+      // 2. Your web app's Firebase configuration
+      // REPLACE THIS with your actual config from the Firebase Console
+      const firebaseConfig = {
+            apiKey: "AIzaSyC-Rm6at6ir7lRGx2ZpJvHYDtB_Y6JWME0",
+            authDomain: "measurely-ctd-capstone.firebaseapp.com",
+            databaseURL: "https://measurely-ctd-capstone-default-rtdb.firebaseio.com",
+            projectId: "measurely-ctd-capstone",
+            storageBucket: "measurely-ctd-capstone.firebasestorage.app",
+            messagingSenderId: "130241754874",
+            appId: "1:130241754874:web:e201593781a7212e75fb43",
+            measurementId: "G-LJ2HBQ144K"
+        };
+
+      // 3. Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+
+      // Initialize Firestore
+     const db = getFirestore(app);
+
+      // --- DOM Elements ---
+      const emailInput = document.getElementById('email');
+      const passInput = document.getElementById('password');
+      const statusTxt = document.getElementById('status');
+
+      // --- 4. Sign Up Function ---
+      document.getElementById('btn-signup').addEventListener('click', async () => {
+          const email = emailInput.value;
+          const password = passInput.value;
+          
+          try {
+              const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+              console.log("Account created:", userCredential.user);
+          } catch (error) {
+              alert(error.message);
+          }
+      });
+
+      // --- 5. Login Function ---
+      document.getElementById('btn-login').addEventListener('click', async () => {
+          const email = emailInput.value;
+          const password = passInput.value;
+
+          try {
+              const userCredential = await signInWithEmailAndPassword(auth, email, password);
+              console.log("Logged in:", userCredential.user);
+          } catch (error) {
+              alert(error.message); // e.g., "Wrong password"
+          }
+      });
+
+      // --- 6. Logout Function ---
+      document.getElementById('btn-logout').addEventListener('click', async () => {
+          await signOut(auth);
+          console.log("User signed out");
+      });
+
+      // --- 7. Monitor Auth State (The most important part!) ---
+      // This listener runs automatically whenever the user logs in or out.
+      onAuthStateChanged(auth, (user) => {
+          if (user) {
+              // User is signed in
+              statusTxt.innerText = `Logged in as: ${user.email}`;
+              // Hide login buttons, show logout button, etc.
+          } else {
+              // User is signed out
+              statusTxt.innerText = "User is currently logged out.";
+          }
+      });
+
+      // Select all buttons with the class 'recipe-btn'
+        const buttons = document.querySelectorAll('.recipe-btn');
+        const statusText = document.getElementById('selection-status');
+
+        buttons.forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+                const user = auth.currentUser;
+                const choice = e.target.getAttribute('data-recipe');
+
+                // 1. Check if user is signed in
+                if (!user) {
+                    alert("Please sign in to save your selection!");
+                    return;
+                }
+
+                // 2. Save to Firestore
+                // Path: users -> {userID} -> (data)
+                try {
+                    // We use user.uid to ensure every user has their own document
+                    const userDocRef = doc(db, "users", user.uid);
+                    
+                    await setDoc(userDocRef, {
+                        currentSelection: choice,
+                        lastUpdated: new Date()
+                    }, { merge: true }); // merge: true keeps other data if you add it later
+
+                    statusText.innerText = `Saved choice: ${choice}`;
+                    console.log("Document written with ID: ", user.uid);
+                    
+                } catch (error) {
+                    console.error("Error adding document: ", error);
+                    statusText.innerText = "Error saving selection.";
+                }
+            });
+        });
+    </script>
+</body>
+</html>
