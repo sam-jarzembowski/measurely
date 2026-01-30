@@ -2,10 +2,155 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Measurely</title>
+    <title>Measurely - Choose Recipe</title>
+    <link rel="stylesheet" href="choose-recipe.css">
 </head>
 <body>
-    
+    <header>
+        <h1 class="logo">Measurely</h1>
+        <div id="user-controls" class="hidden">
+            <span id="username-display"></span>
+            <button id="btn-avatar" title="Sign Out">
+                <img src="avatar-icon.png" alt="User Avatar" id="avatar-icon">
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <div id="auth-container">
+            <input type="email" id="email" placeholder="Email">
+            <div class="password-row">
+                <input type="password" id="password" placeholder="Password">
+                <button id="btn-login">Log In</button>
+            </div>
+            <button id="btn-signup" class="secondary">Sign Up</button>
+        </div>
+
+        <p id="status">User is currently logged out.</p>
+
+        <section id="recipe-section">
+            <h3>Choose your recipe:</h3>
+            <div id="recipe-grid">
+                <div class="recipe-card" data-recipe="Toll House Chocolate Chip Cookies">
+                    <div class="recipe-image"></div>
+                    <p>Toll House Chocolate Chip Cookies</p>
+                </div>
+                <div class="recipe-card" data-recipe="Vanilla Cake">
+                    <div class="recipe-image"></div>
+                    <p>Vanilla Cake</p>
+                </div>
+                <div class="recipe-card" data-recipe="Sourdough Bread">
+                    <div class="recipe-image"></div>
+                    <p>Sourdough Bread</p>
+                </div>
+                <div class="recipe-card" data-recipe="Fudgy Brownies">
+                    <div class="recipe-image"></div>
+                    <p>Fudgy Brownies</p>
+                </div>
+            </div>
+            <p id="selection-status"></p>
+        </section>
+    </main>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { 
+            getAuth, 
+            createUserWithEmailAndPassword, 
+            signInWithEmailAndPassword,
+            onAuthStateChanged,
+            signOut
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyC-Rm6at6ir7lRGx2ZpJvHYDtB_Y6JWME0",
+            authDomain: "measurely-ctd-capstone.firebaseapp.com",
+            databaseURL: "https://measurely-ctd-capstone-default-rtdb.firebaseio.com",
+            projectId: "measurely-ctd-capstone",
+            storageBucket: "measurely-ctd-capstone.firebasestorage.app",
+            messagingSenderId: "130241754874",
+            appId: "1:130241754874:web:e201593781a7212e75fb43",
+            measurementId: "G-LJ2HBQ144K"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // DOM Elements
+        const emailInput = document.getElementById('email');
+        const passInput = document.getElementById('password');
+        const statusTxt = document.getElementById('status');
+        const authContainer = document.getElementById('auth-container');
+        const userControls = document.getElementById('user-controls');
+        const userDisplay = document.getElementById('username-display');
+        const recipeCards = document.querySelectorAll('.recipe-card');
+
+        // Sign Up
+        document.getElementById('btn-signup').addEventListener('click', async () => {
+            try {
+                await createUserWithEmailAndPassword(auth, emailInput.value, passInput.value);
+            } catch (error) { alert(error.message); }
+        });
+
+        // Login
+        document.getElementById('btn-login').addEventListener('click', async () => {
+            try {
+                await signInWithEmailAndPassword(auth, emailInput.value, passInput.value);
+            } catch (error) { alert(error.message); }
+        });
+
+        // Logout (Now using the avatar button)
+        document.getElementById('btn-avatar').addEventListener('click', async () => {
+            await signOut(auth);
+            // Clear selections visually on logout
+            recipeCards.forEach(c => c.classList.remove('selected'));
+        });
+
+        // Monitor Auth State
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                statusTxt.innerText = "";
+                userDisplay.innerText = user.email.split('@')[0]; 
+                authContainer.classList.add('hidden');
+                userControls.classList.remove('hidden');
+            } else {
+                statusTxt.innerText = "User is currently logged out.";
+                authContainer.classList.remove('hidden');
+                userControls.classList.add('hidden');
+                document.getElementById('selection-status').innerText = "";
+            }
+        });
+
+        // Recipe Selection Logic
+        recipeCards.forEach(card => {
+            card.addEventListener('click', async () => {
+                const user = auth.currentUser;
+                const choice = card.getAttribute('data-recipe');
+
+                if (!user) {
+                    alert("Please sign in to save your selection!");
+                    return;
+                }
+
+                // Visual Highlight
+                recipeCards.forEach(c => c.classList.remove('selected'));
+                card.classList.add('selected');
+
+                try {
+                    const userDocRef = doc(db, "users", user.uid);
+                    await setDoc(userDocRef, {
+                        currentSelection: choice,
+                        lastUpdated: new Date()
+                    }, { merge: true });
+
+                    document.getElementById('selection-status').innerText = `Saved choice: ${choice}`;
+                } catch (error) {
+                    console.error("Error saving:", error);
+                }
+            });
+        });
+    </script>
 </body>
 </html>
