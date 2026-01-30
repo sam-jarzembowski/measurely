@@ -17,6 +17,8 @@
     </header>
 
     <main>
+        <p id="status">User is currently logged out.\nPlease log in to continue:</p>
+
         <div id="auth-container">
             <input type="email" id="email" placeholder="Email">
             <div class="password-row">
@@ -25,8 +27,6 @@
             </div>
             <button id="btn-signup" class="secondary">Sign Up</button>
         </div>
-
-        <p id="status">User is currently logged out.</p>
 
         <section id="recipe-section">
             <h3>Choose your recipe:</h3>
@@ -48,7 +48,6 @@
                     <p>Fudgy Brownies</p>
                 </div>
             </div>
-            <p id="selection-status"></p>
         </section>
     </main>
 
@@ -116,10 +115,9 @@
                 authContainer.classList.add('hidden');
                 userControls.classList.remove('hidden');
             } else {
-                statusTxt.innerText = "User is currently logged out.";
+                statusTxt.innerText = "User is currently logged out.\nPlease log in to continue:";
                 authContainer.classList.remove('hidden');
                 userControls.classList.add('hidden');
-                document.getElementById('selection-status').innerText = "";
             }
         });
 
@@ -144,8 +142,6 @@
                         currentSelection: choice,
                         lastUpdated: new Date()
                     }, { merge: true });
-
-                    document.getElementById('selection-status').innerText = `Saved choice: ${choice}`;
                 } catch (error) {
                     console.error("Error saving:", error);
                 }
