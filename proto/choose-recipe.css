@@ -63,7 +63,24 @@ header { display: flex; justify-content: space-between; align-items: center; }
     transition: all 0.2s ease;
 }
 
-.recipe-image { height: 100px; background: #eee; margin-bottom: 10px; border-radius: 4px; }
+.recipe-image {
+    width: 100%;
+    background: #eee;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    overflow: hidden;        /* clip overflow when using object-fit */
+    aspect-ratio: 1/1;      /* keeps a consistent visual ratio */
+    height: auto;            /* fallback-friendly */
+    display: block;
+}
+
+.recipe-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;       /* fills the container without distortion */
+    display: block;
+    border-radius: inherit;  /* match container rounding */
+}
 
 /* The visual distinction requested */
 .recipe-card.selected {
@@ -79,11 +96,9 @@ button { cursor: pointer; padding: 8px 15px; }
 @media screen and (max-width: 768px) {
 
     body {
-        font-size: 20px;
+        font-size: 1.2em;
     }
 
-    .recipe-image {
-        height: 130px;
-    }
+    
     
 }
