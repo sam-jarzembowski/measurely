@@ -17,7 +17,7 @@
     </header>
 
     <main>
-        <p id="status">User is currently logged out.\nPlease log in to continue:</p>
+        <p id="status">User is currently logged out. Please log in to continue:</p>
 
         <div id="auth-container">
             <input type="email" id="email" placeholder="Email">
@@ -117,7 +117,7 @@
                 authContainer.classList.add('hidden');
                 userControls.classList.remove('hidden');
             } else {
-                statusTxt.innerText = "User is currently logged out.\nPlease log in to continue:";
+                statusTxt.innerText = "User is currently logged out. Please log in to continue:";
                 authContainer.classList.remove('hidden');
                 userControls.classList.add('hidden');
             }

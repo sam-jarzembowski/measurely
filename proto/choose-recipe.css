@@ -69,7 +69,7 @@ header { display: flex; justify-content: space-between; align-items: center; }
     margin-bottom: 10px;
     border-radius: 4px;
     overflow: hidden;        /* clip overflow when using object-fit */
-    aspect-ratio: 1/1;      /* keeps a consistent visual ratio */
+    aspect-ratio: 16/9;      /* keeps a consistent visual ratio */
     height: auto;            /* fallback-friendly */
     display: block;
 }
@@ -93,12 +93,14 @@ header { display: flex; justify-content: space-between; align-items: center; }
 input { padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
 button { cursor: pointer; padding: 8px 15px; }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 900px) {
 
     body {
-        font-size: 1.2em;
+        font-size: 16px;
     }
 
-    
+    .recipe-image {
+        aspect-ratio: 1/1;      /* keeps a consistent visual ratio */
+    }
     
 }
