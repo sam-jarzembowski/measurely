@@ -1,0 +1,61 @@
+{
+  "demos": {
+    "RecipeDemov1": {
+      "title": "Chocolate Chip Cookies [DEMO]",
+      "steps": [
+        {
+          "step_id": 0,
+          "type": "instruction",
+          "text": "Preheat the oven to 350°F."
+        },
+        {
+          "step_id": 1,
+          "type": "instruction",
+          "text": "Get out: Mixing bowl, Whisk."
+        },
+        {
+          "step_id": 2,
+          "type": "instruction",
+          "text": "Get out: All-purpose flour."
+        },
+        {
+          "step_id": 3,
+          "type": "instruction",
+          "text": "Place the mixing bowl on the scale."
+        },
+        {
+          "step_id": 4,
+          "type": "measure",
+          "text": "Add flour until full.",
+          "ingredient": "all-purpose flour",
+          "target_value": 100,
+          "unit": "g",
+          "tolerance": 5
+        },
+        {
+          "step_id": 5,
+          "type": "instruction",
+          "text": "Move bowl under the dispenser."
+        },
+        {
+          "step_id": 6,
+          "type": "dispense",
+          "text": "Press to dispense 1 tsp of salt.",
+          "ingredient": "salt",
+          "amount": 1,
+          "unit": "tsp"
+        },
+        {
+          "step_id": 7,
+          "type": "instruction",
+          "text": "Whisk ingredients to combine."
+        },
+        {
+          "step_id": 8,
+          "type": "instruction",
+          "text": "Recipe complete!"
+        }
+      ]
+    }
+  }
+}
