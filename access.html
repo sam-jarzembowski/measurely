@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Access Measurely</title>
+    <link rel="stylesheet" href="css/access.css">
+</head>
+<body>
+
+    <main id="access-container">
+        <img id="MeasurelyLogo" src="brand/MeasurelyLogo-Color.png" alt="Measurely logo"> 
+        <h1>Measurely</h1>
+        <p id="status">Please log in to continue</p>
+
+        <div id="auth-form">
+            <input type="email" id="email" placeholder="Email">
+            <input type="password" id="password" placeholder="Password">
+            
+            <div class="button-group">
+                <button id="btn-login">Log In</button>
+                <button id="btn-signup" class="secondary">Sign Up</button>
+            </div>
+
+            <div id="loading-spinner" class="hidden">
+                <div class="spinner"></div>
+                <p>Authenticating...</p>
+            </div>
+        </div>
+    </main>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { 
+            getAuth, 
+            createUserWithEmailAndPassword, 
+            signInWithEmailAndPassword,
+            onAuthStateChanged
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        // 1. Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyC-Rm6at6ir7lRGx2ZpJvHYDtB_Y6JWME0",
+            authDomain: "measurely-ctd-capstone.firebaseapp.com",
+            databaseURL: "https://measurely-ctd-capstone-default-rtdb.firebaseio.com",
+            projectId: "measurely-ctd-capstone",
+            storageBucket: "measurely-ctd-capstone.firebasestorage.app",
+            messagingSenderId: "130241754874",
+            appId: "1:130241754874:web:e201593781a7212e75fb43",
+            measurementId: "G-LJ2HBQ144K"
+        };
+
+        // 2. Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // 3. DOM Elements
+        const emailInput = document.getElementById('email');
+        const passInput = document.getElementById('password');
+        const authForm = document.getElementById('auth-form');
+        const loader = document.getElementById('loading-spinner');
+        const statusTxt = document.getElementById('status');
+
+        // Helper function to toggle loading state
+        function setLoading(isLoading) {
+            if (isLoading) {
+                authForm.classList.add('hidden');
+                loader.classList.remove('hidden');
+                statusTxt.innerText = "Working on it...";
+            } else {
+                authForm.classList.remove('hidden');
+                loader.classList.add('hidden');
+            }
+        }
+
+        // 4. Sign Up Logic
+        document.getElementById('btn-signup').addEventListener('click', async () => {
+            const email = emailInput.value;
+            const password = passInput.value;
+
+            if(!email || !password) return alert("Please fill in all fields.");
+
+            setLoading(true);
+            try {
+                await createUserWithEmailAndPassword(auth, email, password);
+                // On success, onAuthStateChanged will handle the redirect
+            } catch (error) { 
+                setLoading(false);
+                alert("Signup Error: " + error.message); 
+            }
+        });
+
+        // 5. Login Logic
+        document.getElementById('btn-login').addEventListener('click', async () => {
+            const email = emailInput.value;
+            const password = passInput.value;
+
+            if(!email || !password) return alert("Please fill in all fields.");
+
+            setLoading(true);
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                // On success, onAuthStateChanged will handle the redirect
+            } catch (error) { 
+                setLoading(false);
+                alert("Login Error: " + error.message); 
+            }
+        });
+
+        // 6. Monitor Auth State (The "Traffic Cop")
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                console.log("User authenticated, redirecting...");
+                window.location.href = 'myRecipes.html';
+            } else {
+                // Stay on page, ensure loader is hidden
+                setLoading(false);
+                statusTxt.innerText = "Please log in to continue";
+            }
+        });
+    </script>
+</body>
+</html>

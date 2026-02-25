@@ -2,6 +2,7 @@
 
 body {
     margin: 0;
+    background-color: #f9f9f9;
     display: flex;
     flex-direction: column;  /* Stacks elements vertically */
     justify-content: center; /* Centers vertically */
