@@ -1,0 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Inclusive+Sans:ital,wght@0,300..700;1,300..700&family=Instrument+Serif:ital@0;1&display=swap');
+
+body {
+    margin: 0;
+    display: flex;
+    flex-direction: column;  /* Stacks elements vertically */
+    justify-content: center; /* Centers vertically */
+    align-items: center;     /* Centers horizontally */
+    height: 100vh;           /* Uses 100% of the viewport height */
+    text-align: center;
+
+    font-family: "Inclusive Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
+#MeasurelyLogo {
+    max-width: 150px;        /* Adjust this size to fit your logo */
+    height: auto;
+    margin-bottom: 20px;     /* Adds a little gap between 'M' and the text */
+}
+
+h1 {
+    margin: 0;
+    font-weight: 300;
+}
