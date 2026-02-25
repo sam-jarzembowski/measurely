@@ -2,7 +2,7 @@
 
 body {
     margin: 0;
-    margin-top: -50px;
+    margin-top: -36px;
     display: flex;
     justify-content: center; /* Horizontal center */
     align-items: center;     /* Vertical center */
@@ -93,10 +93,11 @@ button.secondary {
 
 .hidden { display: none !important; }
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 700px) {
 
     body {
         font-size: 16px;
+        margin-top: -68px;
     }
 
     /* .recipe-image {
