@@ -30,7 +30,10 @@ aside {
     width: var(--sidebar-width);
     background: var(--primary-dark);
     color: white;
-    padding: 30px 20px;
+    padding-top: 40px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 20px;
     position: fixed;
     height: 100vh;
     display: flex;
@@ -39,11 +42,22 @@ aside {
 }
 
 aside h1 {
-    font-family: "Instrument Serif", serif; /* Added your serif for the logo/brand feel */
     font-size: 1.8rem;
     font-weight: 500;
     margin-bottom: 40px;
     color: #fff;
+}
+
+.sidebar-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.sidebar-header img {
+    max-width: 70px;
+    margin-bottom: 20px;
 }
 
 .sidebar-nav {
@@ -67,11 +81,6 @@ aside h1 {
 .nav-link:hover, .nav-link.active {
     background: var(--accent-gray);
     color: white;
-}
-
-.sidebar-header img {
-    max-width: 70px;
-    margin-bottom: 20px;
 }
 
 /* Sidebar Footer (User Info) */
