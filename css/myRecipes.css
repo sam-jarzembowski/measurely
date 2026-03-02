@@ -1,0 +1,192 @@
+/* --- 1. Imports & Global Variables --- */
+@import url('https://fonts.googleapis.com/css2?family=Inclusive+Sans:ital,wght@0,300..700;1,300..700&family=Instrument+Serif:ital@0;1&display=swap');
+
+:root {
+    --sidebar-width: 240px;
+    --primary-dark: #1a1a1a;
+    --accent-gray: #333;
+    --text-main: #555;
+    --bg-light: #f8f9fa;
+    --font-main: "Inclusive Sans", sans-serif;
+}
+
+/* --- 2. Base Styles --- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #f9f9f9;
+    font-family: var(--font-main);
+    font-size: 18px;
+    display: flex; /* Aligns sidebar and main side-by-side */
+    min-height: 100vh;
+}
+
+/* --- 3. Sidebar Navigation (Fixed on Left) --- */
+aside {
+    width: var(--sidebar-width);
+    background: var(--primary-dark);
+    color: white;
+    padding: 30px 20px;
+    position: fixed;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    z-index: 1001;
+}
+
+aside h1 {
+    font-family: "Instrument Serif", serif; /* Added your serif for the logo/brand feel */
+    font-size: 1.8rem;
+    font-weight: 500;
+    margin-bottom: 40px;
+    color: #fff;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column; /* Stacks links on top of each other */
+    gap: 8px;
+    flex-grow: 1;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    color: #ccc;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+}
+
+.nav-link:hover, .nav-link.active {
+    background: var(--accent-gray);
+    color: white;
+}
+
+.sidebar-header img {
+    max-width: 70px;
+    margin-bottom: 20px;
+}
+
+/* Sidebar Footer (User Info) */
+.sidebar-footer {
+    border-top: 1px solid #444;
+    padding-top: 20px;
+}
+
+#welcome-msg {
+    font-size: 0.85rem;
+    color: #888;
+    margin-bottom: 12px;
+    font-style: italic;
+}
+
+#btn-logout {
+    width: 100%;
+    background-color: transparent;
+    color: white;
+    border: 1px solid #555;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+#btn-logout:hover {
+    background: #333;
+}
+
+/* --- 4. Main Content Area --- */
+main {
+    margin-left: var(--sidebar-width); /* Prevents content from being hidden behind sidebar */
+    padding: 40px;
+    flex-grow: 1;
+    background-color: var(--bg-light);
+}
+
+header.content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+/* --- 5. Recipe Library Grid --- */
+#recipe-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+    width: 100%;
+}
+
+.recipe-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transition: transform 0.2s ease;
+}
+
+.recipe-card:hover {
+    transform: translateY(-5px);
+}
+
+.recipe-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+.card-content {
+    padding: 20px;
+}
+
+.card-content h3 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    color: var(--primary-dark);
+}
+
+.btn-start {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--primary-dark);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+/* --- 6. Responsive Queries --- */
+
+/* Mobile (Screen 768px or narrower) */
+@media (max-width: 768px) {
+    body {
+        flex-direction: column;
+    }
+    aside {
+        width: 100%;
+        height: auto;
+        position: relative;
+        padding: 20px;
+    }
+    aside h1 { margin-bottom: 20px; }
+    
+    .sidebar-nav {
+        flex-direction: row; /* Horizontal links on mobile to save space */
+        flex-wrap: wrap;
+    }
+    
+    main {
+        margin-left: 0;
+        padding: 20px;
+    }
+}
