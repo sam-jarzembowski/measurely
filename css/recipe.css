@@ -153,7 +153,7 @@ header.content-header {
 /* --- Updated Recipe Image Container --- */
 .recipe-image {
     width: 100%;
-    height: 16rem; 
+    height: 20rem; 
     background: #eee;
     margin-bottom: 10px;
     /* border-radius: 4px; */
@@ -182,6 +182,136 @@ header.content-header {
     font-size: 1rem;
     color: var(--primary-dark);
     font-weight: 600;
+}
+
+/* Layout for the Recipe Content */
+.recipe-content-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr; /* Ingredients on left, Instructions on right */
+    gap: 40px;
+    margin-top: 30px;
+}
+
+/* Refined Recipe Actions */
+.recipe-actions {
+    display: flex;
+    justify-content: space-between; /* Pushes text left and buttons right */
+    align-items: flex-end;
+    border-bottom: 1px solid #ddd;
+    padding-top: 10px;
+    padding-bottom: 20px;
+    margin-bottom: 30px;
+}
+
+.recipe-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.recipe-meta p {
+    font-size: 0.9rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.button-group {
+    display: flex;
+    gap: 12px;
+}
+
+/* --- Refined Buttons (Matching Previous Style) --- */
+.btn-primary, .btn-secondary {
+    padding: 10px 18px;
+    border-radius: 4px; /* Slightly sharper corners to match brand */
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: none;
+    border: none;
+}
+
+/* "Add to My Recipes" - Text Link Style */
+.btn-secondary {
+    background: transparent;
+    color: #333;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    padding: 10px 8px; /* Less horizontal padding for link style */
+}
+
+.btn-secondary:hover {
+    color: #000;
+    opacity: 1;
+    background: rgba(0,0,0,0.05);
+}
+
+/* "Upload and Start Baking" - Solid High Contrast */
+.btn-primary {
+    background: var(--primary-dark);
+    color: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.btn-primary:hover {
+    background: #000;
+    transform: translateY(-1px);
+    opacity: 1;
+}
+
+/* --- Instructions Spacing Fix --- */
+.ingredients h2 {
+    margin-bottom: 20px; /* Adds space specifically below the heading */
+}
+.instructions h2 {
+    margin-bottom: 24px; /* Adds space specifically below the heading */
+}
+
+.instructions ol {
+    counter-reset: step-counter;
+    list-style: none;
+    padding-left: 0;
+    margin-top: 10px; /* Extra breathing room from the title */
+}
+
+/* Increase vertical gap between steps if needed */
+.instructions li {
+    counter-increment: step-counter;
+    position: relative;
+    padding-left: 48px; /* Slightly more space for the circle */
+    margin-bottom: 28px; /* More space between different steps */
+    line-height: 1.6;
+}
+
+/* Ingredients - No Bullets */
+.ingredients ul {
+    list-style: none; /* Removes bullets */
+    padding-left: 0;
+}
+
+.ingredients li {
+    padding: 8px 0;
+    border-bottom: 1px solid #eee; /* Adds a clean separator */
+    color: var(--text-main);
+}
+
+.instructions li::before {
+    content: counter(step-counter);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 30px;
+    height: 30px;
+    background: var(--primary-dark);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0.9rem;
 }
 
 /* --- 6. Responsive Queries --- */
