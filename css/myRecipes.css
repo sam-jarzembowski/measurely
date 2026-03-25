@@ -130,7 +130,7 @@ header.content-header {
 /* --- 5. Recipe Library Grid --- */
 #recipe-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Two cards per row */
+    grid-template-columns: repeat(3, 1fr); /* Two cards per row */
     gap: 24px;
     margin-top: 20px;
 }
