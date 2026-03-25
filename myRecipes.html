@@ -21,6 +21,16 @@
             <a href="#" class="nav-link">Account</a>
         </nav>
 
+        <div id="active-recipe-section" style="display: none;">
+            <p class="sidebar-label">Currently Selected</p>
+            <a id="active-recipe-link" href="#" class="active-recipe-card">
+                <img id="active-recipe-img" src="" alt="">
+                <div class="active-recipe-info">
+                    <span id="active-recipe-name"></span>
+                </div>
+            </a>
+        </div>
+
         <div class="sidebar-footer">
             <p id="welcome-msg">Hi there!</p>
             <button id="btn-logout">Sign Out</button>
@@ -78,8 +88,14 @@
             onAuthStateChanged, 
             signOut 
         } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { 
+            getFirestore, 
+            doc, 
+            setDoc, 
+            onSnapshot 
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // 1. Firebase Configuration (Ensure this matches access.html exactly)
+        // 1. Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyC-Rm6at6ir7lRGx2ZpJvHYDtB_Y6JWME0",
             authDomain: "measurely-ctd-capstone.firebaseapp.com",
@@ -91,35 +107,67 @@
             measurementId: "G-LJ2HBQ144K"
         };
 
-        // 2. Initialize Firebase
+        // 2. Initialize Firebase & Firestore
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
+        const db = getFirestore(app);
 
         // 3. DOM Elements
         const welcomeMsg = document.getElementById('welcome-msg');
         const btnLogout = document.getElementById('btn-logout');
-        const recipeSearch = document.getElementById('recipe-search');
         const recipeCards = document.querySelectorAll('.recipe-card');
+        const recipeSearch = document.getElementById('recipe-search'); // Ensure this ID exists in your HTML!
+        const activeSection = document.getElementById('active-recipe-section');
 
         // 4. Protection & Identity Logic (The Security Guard)
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 console.log("Access Granted:", user.email);
-                
-                // Personalize the greeting
                 const userName = user.email.split('@')[0];
                 welcomeMsg.innerText = `Hi, ${userName}!`;
 
                 // Reveal the page content
                 document.body.style.display = "block";
+
+                // 5. Real-time Firestore Sync for Sidebar Selection
+                const userDocRef = doc(db, "users", user.uid);
+                onSnapshot(userDocRef, (docSnap) => {
+                    if (docSnap.exists() && docSnap.data().currentSelection) {
+                        const data = docSnap.data().currentSelection;
+                        if (activeSection) {
+                            activeSection.style.display = 'block';
+                            document.getElementById('active-recipe-name').innerText = data.name;
+                            document.getElementById('active-recipe-img').src = data.img;
+                        }
+                    }
+                });
             } else {
-                // Not logged in? Kick them back to the login page
                 console.warn("Unauthorized access. Redirecting...");
-                window.location.href = 'access.html';
+                window.location.href = 'access.html'; //
             }
         });
 
-        // 5. Logout Logic
+        // --- 6. Simple Navigation (No Saving) ---
+        recipeCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const recipeID = card.getAttribute('data-recipe');
+                // Just navigate to the page
+                window.location.href = `recipes/${encodeURIComponent(recipeID)}.html`;
+            });
+        });
+
+        // 7. Search/Filter Logic
+        if (recipeSearch) {
+            recipeSearch.addEventListener('input', (e) => {
+                const term = e.target.value.toLowerCase();
+                recipeCards.forEach(card => {
+                    const title = card.querySelector('h3').innerText.toLowerCase();
+                    card.style.display = title.includes(term) ? "block" : "none";
+                });
+            });
+        }
+
+        // 8. Logout Logic
         btnLogout.addEventListener('click', async () => {
             try {
                 await signOut(auth);
@@ -128,33 +176,6 @@
                 console.error("Logout failed:", error);
             }
         });
-
-        // 6. Search/Filter Logic
-        // This looks at each card and hides it if it doesn't match the search input
-        recipeSearch.addEventListener('input', (e) => {
-            const term = e.target.value.toLowerCase();
-            
-            recipeCards.forEach(card => {
-                const title = card.querySelector('h3').innerText.toLowerCase();
-                if (title.includes(term)) {
-                    card.style.display = "block";
-                } else {
-                    card.style.display = "none";
-                }
-            });
-        });
-
-        // --- 7. Navigation to Description Page ---
-        recipeCards.forEach(card => {
-            card.addEventListener('click', () => {
-                const recipeID = card.getAttribute('data-recipe');
-                
-                // This takes the ID (e.g., "RecipeDemoV1") and adds it to the URL
-                // Example Result: recipes/Name.html
-                window.location.href = `recipes/${encodeURIComponent(recipeID)}.html`;
-            });
-        });
-
     </script>
 </body>
 </html>

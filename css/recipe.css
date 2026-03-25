@@ -112,6 +112,66 @@ aside h1 {
     background: #333;
 }
 
+/* Sidebar "Currently Selected" Section */
+.sidebar-label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #666;
+    margin: 30px 12px 10px 12px;
+    font-weight: 700;
+}
+
+.active-recipe-card {
+    background: #252525;
+    padding: 12px;
+    margin: 0 5px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: 1px solid #333;
+    text-decoration: none; /* Removes link underline */
+    transition: all 0.3s ease;
+}
+
+.active-recipe-card:hover {
+    background: #333;
+    border-color: #ff4b2b; /* Subtle highlight color */
+    transform: translateY(-2px);
+}
+
+.active-recipe-card img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.active-recipe-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+#active-recipe-name {
+    font-size: 0.85rem;
+    color: #fff;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.view-prompt {
+    font-size: 0.7rem;
+    color: #888;
+    font-weight: 400;
+}
+
+.active-recipe-card:hover .view-prompt {
+    color: #fff;
+}
+
 /* --- 4. Main Content Area --- */
 main {
     margin-left: var(--sidebar-width); /* Prevents content from being hidden behind sidebar */
