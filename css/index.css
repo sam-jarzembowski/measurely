@@ -121,6 +121,7 @@ a {
     font-size: clamp(1.4rem, 2.5vw, 2rem);
     color: var(--primary-dark);
     font-weight: 500;
+    line-height: 1.2;
 }
 
 .hero-tagline {
@@ -208,6 +209,7 @@ main {
     color: var(--primary-dark);
     font-weight: 400;
     font-size: clamp(1.8rem, 2.6vw, 2.4rem);
+    line-height: 1.2;
 }
 
 .split-text p {
