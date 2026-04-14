@@ -7,7 +7,7 @@
     --bg-light: #f8f9fa;
     --bg-white: #ffffff;
     --line: #e3e3e3;
-    --brand: #9b3b2b;
+    --brand:#EE3569;
     --font-main: "Inclusive Sans", sans-serif;
     --font-display: "Instrument Serif", serif;
 }
@@ -307,7 +307,7 @@ main {
 .feature-box,
 .avatar {
     width: 100%;
-    aspect-ratio: 4 / 3;
+    aspect-ratio: 1 / 1;
     border-radius: 12px;
     background: linear-gradient(140deg, #f8e9e3, #f2f2f2);
     border: 1px solid #e6e1de;
@@ -323,6 +323,10 @@ main {
 .team-card p,
 .feature-card p {
     font-size: 0.95rem;
+}
+
+.team-card a {
+    color: var(--brand);
 }
 
 .site-footer {
