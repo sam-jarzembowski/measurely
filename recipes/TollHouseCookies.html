@@ -108,6 +108,16 @@
         const btnLogout = document.getElementById('btn-logout');
         const btnUpload = document.getElementById('btn-upload');
         const activeSection = document.getElementById('active-recipe-section');
+        const activeName = document.getElementById('active-recipe-name');
+        const activeImg = document.getElementById('active-recipe-img');
+        const activeLink = document.getElementById('active-recipe-link');
+
+        const recipeMeta = {
+            RecipeDemoV1: { id: "RecipeDemoV1", name: "Chocolate Chip Cookies [DEMO]", img: "../img/cookiedemo.jpeg" },
+            "Fudgy Brownies": { id: "Fudgy Brownies", name: "Fudgy Brownies", img: "../img/fudgybrownies.jpg" },
+            "Vanilla Cake": { id: "Vanilla Cake", name: "Vanilla Cake", img: "../img/vanillacake.jpg" },
+            TollHouseCookies: { id: "TollHouseCookies", name: "Toll House Chocolate Chip Cookies", img: "../img/tollhousecookies.jpg" }
+        };
 
         onAuthStateChanged(auth, (user) => {
             if (user) {
@@ -117,12 +127,22 @@
                 // --- ADDED: Sidebar Listener ---
                 const userDocRef = doc(db, "users", user.uid);
                 onSnapshot(userDocRef, (docSnap) => {
+                    if (!activeSection) return;
                     if (docSnap.exists() && docSnap.data().currentSelection) {
-                        const data = docSnap.data().currentSelection;
+                        const selectedRaw = docSnap.data().currentSelection;
+                        const selectedId = typeof selectedRaw === "string" ? selectedRaw : selectedRaw.id;
+                        const data = recipeMeta[selectedId] || { id: selectedId, name: selectedId, img: "" };
                         activeSection.style.display = 'block';
-                        document.getElementById('active-recipe-name').innerText = data.name;
-                        document.getElementById('active-recipe-img').src = data.img;
-                        document.getElementById('active-recipe-link').href = `../recipes/${data.id}.html`;
+                        if (activeName) activeName.innerText = data.name;
+                        if (activeImg) {
+                            if (data.img) {
+                                activeImg.src = data.img;
+                                activeImg.style.display = "block";
+                            } else {
+                                activeImg.style.display = "none";
+                            }
+                        }
+                        if (activeLink) activeLink.href = `../recipes/${encodeURIComponent(data.id)}.html`;
                     }
                 });
             } else {
@@ -138,18 +158,12 @@
             btnUpload.innerText = "Selecting...";
             btnUpload.disabled = true;
 
-            const recipeName = document.querySelector('main h1').innerText;
-            const recipeImg = document.querySelector('.recipe-image img').src;
             const recipeID = window.location.pathname.split('/').pop().replace('.html', '');
 
             try {
                 const userDocRef = doc(db, "users", user.uid);
                 await setDoc(userDocRef, {
-                    currentSelection: {
-                        id: recipeID,
-                        name: recipeName,
-                        img: recipeImg
-                    },
+                    currentSelection: recipeID,
                     lastUpdated: new Date()
                 }, { merge: true });
 

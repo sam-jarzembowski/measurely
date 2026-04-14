@@ -118,6 +118,17 @@
         const recipeCards = document.querySelectorAll('.recipe-card');
         const recipeSearch = document.getElementById('recipe-search'); // Ensure this ID exists in your HTML!
         const activeSection = document.getElementById('active-recipe-section');
+        const activeName = document.getElementById('active-recipe-name');
+        const activeImg = document.getElementById('active-recipe-img');
+        const activeLink = document.getElementById('active-recipe-link');
+
+        const recipeMap = {};
+        recipeCards.forEach(card => {
+            const id = card.getAttribute('data-recipe');
+            const title = card.querySelector('h3')?.innerText || id;
+            const img = card.querySelector('img')?.src || "";
+            recipeMap[id] = { id, name: title, img };
+        });
 
         // 4. Protection & Identity Logic (The Security Guard)
         onAuthStateChanged(auth, (user) => {
@@ -132,13 +143,22 @@
                 // 5. Real-time Firestore Sync for Sidebar Selection
                 const userDocRef = doc(db, "users", user.uid);
                 onSnapshot(userDocRef, (docSnap) => {
+                    if (!activeSection) return;
                     if (docSnap.exists() && docSnap.data().currentSelection) {
-                        const data = docSnap.data().currentSelection;
-                        if (activeSection) {
-                            activeSection.style.display = 'block';
-                            document.getElementById('active-recipe-name').innerText = data.name;
-                            document.getElementById('active-recipe-img').src = data.img;
+                        const selectedRaw = docSnap.data().currentSelection;
+                        const selectedId = typeof selectedRaw === "string" ? selectedRaw : selectedRaw.id;
+                        const data = recipeMap[selectedId] || { id: selectedId, name: selectedId, img: "" };
+                        activeSection.style.display = 'block';
+                        if (activeName) activeName.innerText = data.name;
+                        if (activeImg) {
+                            if (data.img) {
+                                activeImg.src = data.img;
+                                activeImg.style.display = "block";
+                            } else {
+                                activeImg.style.display = "none";
+                            }
                         }
+                        if (activeLink) activeLink.href = `recipes/${encodeURIComponent(data.id)}.html`;
                     }
                 });
             } else {
