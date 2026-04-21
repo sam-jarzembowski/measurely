@@ -117,9 +117,23 @@
             RecipeDemoV1: { id: "RecipeDemoV1", name: "Chocolate Chip Cookies [DEMO]", img: "../img/cookiedemo.jpeg" },
             "Fudgy Brownies": { id: "Fudgy Brownies", name: "Fudgy Brownies", img: "../img/fudgybrownies.jpg" },
             "Vanilla Cake": { id: "Vanilla Cake", name: "Vanilla Cake", img: "../img/vanillacake.jpg" },
-            TollHouseCookies: { id: "TollHouseCookies", name: "Toll House Chocolate Chip Cookies", img: "../img/tollhousecookies.jpg" },
+            TollHouseChocolateChipCookies: { id: "TollHouseChocolateChipCookies", name: "Toll House Chocolate Chip Cookies", img: "../img/tollhousecookies.jpg" },
+            TollHouseCookies: { id: "TollHouseChocolateChipCookies", name: "Toll House Chocolate Chip Cookies", img: "../img/tollhousecookies.jpg" },
+            PBCookies: { id: "PBCookies", name: "Peanut Butter Cookies", img: "../img/cookiedemo.jpeg" },
+            PeanutButterCookies: { id: "PBCookies", name: "Peanut Butter Cookies", img: "../img/cookiedemo.jpeg" },
+            CookieDemo: { id: "CookieDemo", name: "Cookie Demo", img: "../img/cookiedemo.jpeg" },
             SugarCookies: { id: "SugarCookies", name: "Sugar Cookies", img: "../img/cookiedemo.jpeg" }
         };
+
+        const recipePageMap = {
+            TollHouseChocolateChipCookies: "TollHouseCookies",
+            TollHouseCookies: "TollHouseCookies",
+            PBCookies: "PeanutButterCookies",
+            PeanutButterCookies: "PeanutButterCookies",
+            CookieDemo: "RecipeDemoV1"
+        };
+
+        const getRecipePage = (recipeId) => recipePageMap[recipeId] || recipeId;
 
         onAuthStateChanged(auth, (user) => {
             if (user) {
@@ -143,7 +157,7 @@
                                 activeImg.style.display = "none";
                             }
                         }
-                        if (activeLink) activeLink.href = `../recipes/${encodeURIComponent(data.id)}.html`;
+                        if (activeLink) activeLink.href = `../recipes/${encodeURIComponent(getRecipePage(data.id))}.html`;
                     }
                 });
             } else {
