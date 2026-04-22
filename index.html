@@ -18,7 +18,7 @@
                 <h1>Measurely</h1>
                 <h2>Baking belongs to everyone.</h2>
                 <p class="hero-tagline">Measurely is an assistive baking device designed to restore independence in the kitchen. It combines an <strong>automated dispenser</strong> that handles the difficult, precise measurements of small ingredients, with an <strong>integrated scale</strong> and <strong>guided display</strong> that simplifies the measuring of large ingredients.</p>
-                <a class="cta" href="#features">See the demo</a>
+                <a class="cta" href="#" id="demo-button">See the demo</a>
             </div>
             <a class="scroll-cue" href="#problem" aria-label="Scroll to next section">
                 <span></span>
@@ -140,5 +140,47 @@
         </div>
         <a class="ghost-link" href="#top">Back to top</a>
     </footer>
+
+    <div class="video-modal" id="video-modal" hidden>
+        <button class="video-modal__backdrop" type="button" aria-label="Close demo video" data-close-video></button>
+        <div class="video-modal__content" role="dialog" aria-modal="true" aria-label="Measurely demo video">
+            <button class="video-modal__close" type="button" aria-label="Close demo video" data-close-video>Close</button>
+            <video id="demo-video" controls playsinline preload="metadata" src="brand/MeasurelyVideo.mov"></video>
+        </div>
+    </div>
+
+    <script>
+        const demoButton = document.getElementById("demo-button");
+        const videoModal = document.getElementById("video-modal");
+        const demoVideo = document.getElementById("demo-video");
+        const closeVideoButtons = document.querySelectorAll("[data-close-video]");
+
+        function closeVideoModal() {
+            videoModal.hidden = true;
+            document.body.classList.remove("modal-open");
+            demoVideo.pause();
+            demoVideo.currentTime = 0;
+        }
+
+        demoButton.addEventListener("click", (event) => {
+            event.preventDefault();
+            videoModal.hidden = false;
+            document.body.classList.add("modal-open");
+            const playAttempt = demoVideo.play();
+            if (playAttempt && typeof playAttempt.catch === "function") {
+                playAttempt.catch(() => {});
+            }
+        });
+
+        closeVideoButtons.forEach((button) => {
+            button.addEventListener("click", closeVideoModal);
+        });
+
+        document.addEventListener("keydown", (event) => {
+            if (event.key === "Escape" && !videoModal.hidden) {
+                closeVideoModal();
+            }
+        });
+    </script>
 </body>
 </html>
