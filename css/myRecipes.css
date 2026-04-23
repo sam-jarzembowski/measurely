@@ -203,9 +203,9 @@ header.content-header {
 
 .recipe-grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(260px, 1fr));
+    grid-template-columns: repeat(3, minmax(220px, 1fr));
     gap: 24px;
-    max-width: 1000px;
+    max-width: 1200px;
 }
 
 .recipe-card {
@@ -249,6 +249,12 @@ header.content-header {
 }
 
 /* --- 6. Responsive Queries --- */
+
+@media (max-width: 1100px) {
+    .recipe-grid {
+        grid-template-columns: repeat(2, minmax(220px, 1fr));
+    }
+}
 
 /* Mobile (Screen 768px or narrower) */
 @media (max-width: 768px) {
